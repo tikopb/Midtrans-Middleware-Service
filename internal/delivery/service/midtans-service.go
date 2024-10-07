@@ -3,7 +3,6 @@ package service
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/labstack/echo/v4"
 	"github.com/tikopb/Midtrans-Middleware-Service/internal/model"
 	"io/ioutil"
 	"net/http"
@@ -11,7 +10,7 @@ import (
 
 type Repository interface {
 	//CreatePayment
-	CreatePaymentLink(request model.MidtransPaymentLinkRequest, c echo.Context) (model.MidtransPaymentLinkRespont, error)
+	CreatePaymentLink(request model.MidtransPaymentLinkRequest) (model.MidtransPaymentLinkRespont, error)
 }
 
 type midtrans struct {
@@ -21,7 +20,7 @@ func GetRepository() Repository {
 	return &midtrans{}
 }
 
-func (m *midtrans) CreatePaymentLink(request model.MidtransPaymentLinkRequest, c echo.Context) (model.MidtransPaymentLinkRespont, error) {
+func (m *midtrans) CreatePaymentLink(request model.MidtransPaymentLinkRequest) (model.MidtransPaymentLinkRespont, error) {
 	url := "https://api.sandbox.midtrans.com/v1/payment-links"
 	method := "POST"
 

@@ -5,15 +5,18 @@ import (
 	"github.com/tikopb/Midtrans-Middleware-Service/internal/delivery/logger"
 	"github.com/tikopb/Midtrans-Middleware-Service/internal/delivery/rest"
 	"github.com/tikopb/Midtrans-Middleware-Service/internal/delivery/service"
+	master "github.com/tikopb/Midtrans-Middleware-Service/internal/main-module"
 	"net/http"
 )
 
 func main() {
 	logger.Init()
-
 	e := echo.New()
-	service := service.GetRepository()
-	handler := rest.NewHandler(service)
+
+	//load main service
+	repository := master.GetRepository()
+	midtransService := service.GetRepository(&repository)
+	handler := rest.NewHandler(midtransService)
 	rest.LoadRoute(e, handler)
 
 	e.GET("/", func(c echo.Context) error {

@@ -3,6 +3,7 @@ package model
 type MidtransPaymentLinkRespont struct {
 	OrderId    string `json:"order_id"`
 	PaymentUrl string `json:"payment_url"`
+	Message    string `json:"message"`
 }
 
 // Define the MidtransPaymentLinkRequest struct that combines the others

@@ -6,6 +6,8 @@ import (
 	"github.com/tikopb/Midtrans-Middleware-Service/internal/model"
 	"io/ioutil"
 	"net/http"
+
+	master "github.com/tikopb/Midtrans-Middleware-Service/internal/main-module"
 )
 
 type Repository interface {
@@ -14,14 +16,18 @@ type Repository interface {
 }
 
 type midtrans struct {
+	master master.Repository
 }
 
-func GetRepository() Repository {
-	return &midtrans{}
+func GetRepository(master master.Repository) Repository {
+	return &midtrans{
+		master: master,
+	}
 }
 
 func (m *midtrans) CreatePaymentLink(request model.MidtransPaymentLinkRequest) (model.MidtransPaymentLinkRespont, error) {
-	url := "https://api.sandbox.midtrans.com/v1/payment-links"
+	midtrans_base_url := m.master.GetEnvVariabel("midtrans_base_url") + "v1/payment-links'"
+	serverKey := m.master.GetEnvVariabel("serverKey")
 	method := "POST"
 
 	// Convert body to JSON
@@ -31,14 +37,14 @@ func (m *midtrans) CreatePaymentLink(request model.MidtransPaymentLinkRequest) (
 	}
 
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(jsonData))
+	req, err := http.NewRequest(method, midtrans_base_url, bytes.NewBuffer(jsonData))
 	if err != nil {
 		return model.MidtransPaymentLinkRespont{}, err
 	}
 
 	// Set headers
 	req.Header.Add("accept", "application/json")
-	req.Header.Add("authorization", "Basic U0ItTWlkLXNlcnZlci1VX2ZaYzhtT0FteW9zSk83cm9vNzN6Yl86")
+	req.Header.Add("authorization", "Basic "+serverKey)
 	req.Header.Add("content-type", "application/json")
 
 	// Send request
@@ -62,5 +68,5 @@ func (m *midtrans) CreatePaymentLink(request model.MidtransPaymentLinkRequest) (
 	}
 
 	//TODO implement mef
-	panic("implement me")
+	return response, nil
 }

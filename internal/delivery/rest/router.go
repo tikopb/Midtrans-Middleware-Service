@@ -6,4 +6,5 @@ func LoadRoute(e *echo.Echo, handler *handler) {
 	//paymentLink
 	paymentLinkGroup := e.Group("/Payment-link")
 	paymentLinkGroup.POST("/", handler.CreatePaymentLink)
+	paymentLinkGroup.GET("/", handler.GetPaymentLink)
 }

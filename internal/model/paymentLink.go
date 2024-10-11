@@ -1,9 +1,9 @@
 package model
 
 type MidtransPaymentLinkRespont struct {
-	OrderId    string `json:"order_id"`
-	PaymentUrl string `json:"payment_url"`
-	Message    string `json:"message"`
+	OrderId    string   `json:"order_id"`
+	PaymentUrl string   `json:"payment_url"`
+	Message    []string `json:"error_messages"`
 }
 
 // Define the MidtransPaymentLinkRequest struct that combines the others
@@ -39,4 +39,20 @@ type CustomerDetails struct {
 	Phone                         string   `json:"phone"`
 	Notes                         string   `json:"notes"`
 	CustomerDetailsRequiredFields []string `json:"customer_details_required_fields"`
+}
+
+//------
+
+type MidtransPaymentStatus struct {
+	OrderId   string `json:"order_id"`
+	Purchases []struct {
+		PaymentStatus string `json:"payment_status"`
+		PaymentMethod string `json:"payment_method"`
+	} `json:"purchases"`
+}
+
+type MidtransPaymentStatusResponse struct {
+	OrderId       string `json:"order_id"`
+	PaymentStatus string `json:"payment_status"`
+	PaymentMethod string `json:"payment_method"`
 }
